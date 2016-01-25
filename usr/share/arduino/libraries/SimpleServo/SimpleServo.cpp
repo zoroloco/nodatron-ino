@@ -57,48 +57,51 @@ int SimpleServo::move(){
 
 int SimpleServo::move(int angle){
 
-        if(angle>180 || angle<0)//bounds check
-            return _curAngle;
+	if(angle>180 || angle<0)//bounds check
+		return _curAngle;
 
-        unsigned long currentMillis = millis();//always moving
+	unsigned long currentMillis = millis();//always moving
 
-        //do once per move
-        if(!_initMove){
-            _timeElapsed      = 0;
-            _targetAngle      = angle;
-            _moveStartTime    = currentMillis;
-            _initMove         = true;
-            _lastIntervalTime = _moveStartTime;
-        }
+	//do once per move
+	if(!_initMove){
+		_timeElapsed      = 0;
+		_targetAngle      = angle;
+		_moveStartTime    = currentMillis;
+		_initMove         = true;
+		_lastIntervalTime = _moveStartTime;
+	}
 
-        _timeElapsed = currentMillis - _lastIntervalTime;
+	_timeElapsed = currentMillis - _lastIntervalTime;
 
-        //did our set time interval satisfy?
-        if(_timeElapsed >= _timeInterval){
-            _lastIntervalTime = currentMillis;//slide over
-            _timeElapsed      = 0;//reset
+	//did our set time interval satisfy?
+	if(_timeElapsed >= _timeInterval){
+		_lastIntervalTime = currentMillis;//slide over
+		_timeElapsed      = 0;//reset
 
-            if(_curAngle < _targetAngle){//we want to move forward
-                _curAngle++;
-            }
-            else if(_curAngle > _targetAngle){//we want to move backward
-                _curAngle--;
-            }
-            else{//pos has reached target _targetAngle
-                _initMove = false;
-                return _curAngle;
-            }
+		if(_curAngle < _targetAngle){//we want to move forward
+			processMove();
+			_curAngle++;
+		}
+		else if(_curAngle > _targetAngle){//we want to move backward
+			processMove();
+			_curAngle--;
+		}
+		else{//pos has reached target _targetAngle
+			_initMove = false;
+			processMove();
+			return _curAngle;
+		}
 
-            if(_servo.attached()){
-                _servo.write(_curAngle);
-                //Serial.println(_servo.read());
-            }
-
-            return _curAngle;
-        }
-        else{//move is completed
-            return -1;
-        }
+		return _curAngle;
+	}
+	else{//move is completed
+		return -1;
+	}	
 }
 
-
+void SimpleServo::processMove(){
+	if(_servo.attached()){
+		_servo.write(_curAngle);
+		//Serial.println(_servo.read());
+	}	
+}

@@ -51,6 +51,8 @@ class SimpleServo
         int _targetAngle;
         //Flag to trigger an action only once per unique move.
         boolean _initMove;
+		
+		void processMove();
 };
 
 #endif
