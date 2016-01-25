@@ -53,7 +53,7 @@ void loop()
   digitalWrite(ledPin,ledState);
 
   int moveVal = servo.move();
-  Serial.println(moveVal);
+  //Serial.println(moveVal);
 
   //blink activity light only if servo is moving.
   if(servo.isMoving()){
