@@ -1,14 +1,22 @@
 # nodatron-ino
 
-This project contains the code that will be compiled and uploaded to the Arduino.
+This project contains the code that will be compiled and uploaded to the Arduino. 
+This code is made to run on the Arduino R3 and if you want the build scrip to run,
+then you must be working on a Linux system. This whole Nodatron project is meant to run
+on a raspberry pi 2.
 
-Helpful command-line tool if you do not want to use the GUI (Python 2.6+ required)
+Step 1 - install below:
+Thanks to: https://github.com/amperka/ino
 git clone git://github.com/amperka/ino.git
 make install 
 
+mkdir /usr/local/src/arduino
+cd /usr/local/src/arduino
+ino init -t blink (creates initial sketch)
 
-For Raspberry PI:
+You now have your source tree for a sketch.
 
+Now install Arduino software on your Pi.
 apt-get install arduino
 
 
