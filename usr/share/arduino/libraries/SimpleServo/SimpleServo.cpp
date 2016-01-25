@@ -71,8 +71,10 @@ int SimpleServo::move(int angle){
 		_lastIntervalTime = _moveStartTime;
 	}
 
+	
+	
 	_timeElapsed = currentMillis - _lastIntervalTime;
-
+	
 	//did our set time interval satisfy?
 	if(_timeElapsed >= _timeInterval){
 		_lastIntervalTime = currentMillis;//slide over
@@ -87,14 +89,12 @@ int SimpleServo::move(int angle){
 			_curAngle--;
 		}
 		else{//pos has reached target _targetAngle
-			_initMove = false;
-			processMove();
-			return _curAngle;
+			_initMove = false;//ready for next move
 		}
 
 		return _curAngle;
 	}
-	else{//move is completed
+	else{//move did not occur in this cycle.
 		return -1;
 	}	
 }
@@ -102,6 +102,5 @@ int SimpleServo::move(int angle){
 void SimpleServo::processMove(){
 	if(_servo.attached()){
 		_servo.write(_curAngle);
-		//Serial.println(_servo.read());
 	}	
 }
