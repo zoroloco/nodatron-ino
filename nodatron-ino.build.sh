@@ -20,20 +20,26 @@ clear
 
 echo "Executing nodatron-ino build script."
 
-echo "Deleting lib directory " $LIB_DIR
+echo "Deleting old tmp dir " $TMP_DIR
+rm -rf $TMP_DIR
+
+echo "Deleting old nodatron libraries directory " $LIB_DIR
 rm -rf $LIB_DIR
 
-echo "Creating lib directory " $LIB_DIR
+echo "Re-creating nodatron lib directory " $LIB_DIR
 mkdir $LIB_DIR
+
+echo "Re-creating tmp dir " $TMP_DIR
+mkdir $TMP_DIR
 
 echo "Retrieving latest repo: git clone https://github.com/zoroloco/nodatron-ino.git " $TMP_DIR
 git clone https://github.com/zoroloco/nodatron-ino.git $TMP_DIR
 
 echo "Moving latest sketch file to " $SRC_DIR/src
-cp /tmp/sketch.ino $SRC_DIR/src
+cp $TMP_DIR/sketch.ino $SRC_DIR/src
 
 echo "Updating libraries in " $LIB_DIR
-cp -R /tmp/user/share/arduino/libraries/* $LIB_DIR
+cp -R $TMP_DIR/usr/share/arduino/libraries/* $LIB_DIR
 
 echo "Cleaning up /tmp"
 rm -rf $TMP_DIR
