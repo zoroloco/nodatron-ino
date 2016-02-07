@@ -1,67 +1,91 @@
-
-/*
-  This example sketch will rotate a servo 180 degrees when a push button is pushed.
-  Servo will go back to 0 degrees when button turned off. There is an LED that will 
-  be on/off depending on the state of the push button.  Another LED will blink to show
-  activity while the servo is moving.
-*/
-
-
 #include<SimpleServo.h>
 #include<Servo.h>
+#include <LiquidCrystal.h>
 
-const int servoPin = 5;
-const int pin2     = 2;  // pushbutton pin
-const int ledPin   = 12; // LED pin
-const int actPin   = 13; // activity LED pin
+//12,11,5,4,3,2 pins reserved for LCD
+const int servoBasePin = 9;
+const int servoCamPin  = 10;
+const int onPin        = 7;
+const int actPin       = 6;
 
-int ledState   = 0;
-int ledChanged = 0;
+SimpleServo baseServo(servoBasePin);
+SimpleServo camServo(servoCamPin);
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
-SimpleServo servo(servoPin);
+const byte numChars = 32;
+char receivedChars[numChars];
+boolean newData = false;
 
 void setup()
 {
   Serial.begin(9600);
-  pinMode(ledPin, OUTPUT);
+  //pinMode(onPin, OUTPUT);
   pinMode(actPin, OUTPUT);
-  servo.attachPin(servoPin);
-  servo.setSpeed(8);
-}
+  baseServo.attachPin(servoBasePin);
+  camServo.attachPin(servoCamPin);
+  baseServo.setSpeed(8);
+  camServo.setSpeed(8);
 
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2);
+  // Print a message to the LCD.
+  lcd.print("Nodatron init...");
+}
 
 void loop()
 {
-  if(digitalRead(pin2)){
-    if(!ledChanged){
-         if(HIGH == ledState){//OFF position will reset servo
-             servo.setAngle(0);
-         }
-         else{
-             servo.setAngle(180);
-         }
+  recvWithEndMarker();
+  if(newData == true){
+     baseServo.setAngle(atoi(receivedChars));
+     camServo.setAngle(atoi(receivedChars));
 
-         ledState   = !digitalRead(ledPin);
-         //Serial.println(ledState);
-         ledChanged = 1;
-    }
-  }
-  else{
-      ledChanged = 0;
+     //write to LCD display the degrees of both servos.
+     lcd.setCursor(0, 1);
+     lcd.print(receivedChars);
+
+     newData = false;
   }
 
-  digitalWrite(ledPin,ledState);
+  int baseServoMoveVal = baseServo.move();
+  int camServoMoveVal  = camServo.move();
 
-  int moveVal = servo.move();
-  //Serial.println(moveVal);
-
-  //blink activity light only if servo is moving.
-  if(servo.isMoving()){
-      if(-1==moveVal){
+  //blink activity light if a servo is moving.
+  if(baseServo.isMoving() || camServo.isMoving()){
+      if(-1==baseServoMoveVal && -1==camServoMoveVal){
           digitalWrite(actPin,LOW);
       }
       else{
           digitalWrite(actPin,HIGH);
       }
   }
+}
+
+void recvWithEndMarker() {
+        static byte ndx = 0;
+        char endMarker = '\n';
+        char rc;
+
+    while (Serial.available() > 0 && newData == false) {
+        rc = Serial.read();
+        //Serial.println(rc);//test
+        if (rc != endMarker) {
+            receivedChars[ndx] = rc;
+            ndx++;
+            if (ndx >= numChars) {
+                ndx = numChars - 1;
+            }
+        }
+        else {
+          receivedChars[ndx] = '\0'; // terminate the string
+          ndx = 0;
+          newData = true;
+        }
+    }
+}
+
+void showNewData() {
+    if (newData == true) {
+        Serial.println(receivedChars);
+        newData = false;
+    }
 }
