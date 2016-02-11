@@ -1,10 +1,10 @@
 #include "Arduino.h"
 #include "SimpleServo.h"
 #include "Servo.h"
+#include "SimpleMessaging.h"
 
-SimpleServo::SimpleServo(int pin)
+SimpleServo::SimpleServo()
 {
-    _pin              = pin;
     _moveStartTime    = 0;
     _lastIntervalTime = 0;
     _timeInterval     = 0;
@@ -12,11 +12,17 @@ SimpleServo::SimpleServo(int pin)
     _initMove         = false;
     _targetAngle      = 0;
     _timeElapsed      = 0;
+}
 
-    //reset();
+void SimpleServo::processData(char * data){
+	if(SimpleMessaging::isForPin(_pin,data)){
+		
+	}
 }
 
 void SimpleServo::attachPin(int pin){
+	_pin = pin;
+	
     if(_servo.attached())
         detach();
 

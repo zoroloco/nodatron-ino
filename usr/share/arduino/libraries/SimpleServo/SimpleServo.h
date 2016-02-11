@@ -14,7 +14,7 @@ class SimpleServo
 {
     public:
         //This should be called at top of your file.
-        SimpleServo(int pin);
+        SimpleServo();
         //Sets the target angle you want to go to.
         void setAngle(int angle);
         //Value from 1-10. 10 would give you 10ms interval between steps.
@@ -32,7 +32,8 @@ class SimpleServo
         void attachPin(int pin);
         //Kill the servo.
         void detach();
-
+        //Process an incoming message.
+		void processData(char * data);
     private:
         //The servo object.
         Servo _servo;
