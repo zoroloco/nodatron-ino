@@ -1,4 +1,4 @@
-#include<SimpleServo.h>
+#include<Nodatron/SimpleServo.h>
 #include<Servo.h>
 
 const int servoBasePin = 9;

@@ -1,7 +1,7 @@
 #include "Arduino.h"
-#include "SimpleServo.h"
+#include "Nodatron/SimpleServo.h"
 #include "Servo.h"
-#include "SimpleMessaging.h"
+#include "Nodatron/SimpleMessaging.h"
 
 SimpleServo::SimpleServo()
 {
