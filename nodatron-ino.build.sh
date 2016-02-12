@@ -24,10 +24,8 @@ echo "Deleting old tmp dir " $TMP_DIR
 rm -rf $TMP_DIR
 
 echo "Deleting old nodatron libraries directory " $LIB_DIR
-rm -rf $LIB_DIR
-
-echo "Re-creating nodatron lib directory " $LIB_DIR
-mkdir $LIB_DIR
+rm -rf $LIB_DIR/SimpleServo
+rm -rf $LIB_DIR/SimpleMessaging
 
 echo "Re-creating tmp dir " $TMP_DIR
 mkdir $TMP_DIR
