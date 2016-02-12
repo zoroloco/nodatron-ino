@@ -12,7 +12,7 @@
 #
 #
 
-LIB_DIR="/usr/share/arduino/libraries/Nodatron"
+LIB_DIR="/usr/share/arduino/libraries"
 SRC_DIR="/usr/local/src/arduino"
 TMP_DIR="/tmp/nodatron" 
 
