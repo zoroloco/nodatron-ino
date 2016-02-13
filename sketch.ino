@@ -4,8 +4,8 @@
 const int servoBasePin = 9;
 const int servoCamPin  = 10;
 
-SimpleServo baseServo();
-SimpleServo camServo();
+SimpleServo baseServo;
+SimpleServo camServo;
 
 const byte numChars = 32;
 boolean newData     = false;
@@ -13,7 +13,7 @@ char receivedChars[numChars];
 
 void setup()
 {
-  Serial.begin(9600);  
+  Serial.begin(9600);
   baseServo.attachPin(servoBasePin);
   camServo.attachPin(servoCamPin);
   baseServo.setSpeed(8);
@@ -24,8 +24,11 @@ void loop()
 {
   rxData();
   if(newData == true){
-     baseServo.processData(receivedChars);
-     camServo.processData(receivedChars);
+     char c1[8];
+     char c2[8];
+
+     camServo.processData(strcpy(c1,receivedChars));
+     baseServo.processData(strcpy(c2,receivedChars));
      newData = false;
   }
 

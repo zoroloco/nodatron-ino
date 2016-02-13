@@ -3,18 +3,18 @@
 #
 # chmod +x nodatron-ino.build.sh
 #
-# This script will get latest site from github, move the source files 
-# to their appropriate places and then build and upload the code to the 
+# This script will get latest site from github, move the source files
+# to their appropriate places and then build and upload the code to the
 # Arduino.
 # Please run as root.
 #
-# Please adjust your LIB_DIR and SRC_DIR accordingly. 
+# Please adjust your LIB_DIR and SRC_DIR accordingly.
 #
 #
 
 LIB_DIR="/usr/share/arduino/libraries"
 SRC_DIR="/usr/local/src/arduino"
-TMP_DIR="/tmp/nodatron" 
+TMP_DIR="/tmp/nodatron"
 
 clear
 
@@ -24,8 +24,8 @@ echo "Deleting old tmp dir " $TMP_DIR
 rm -rf $TMP_DIR
 
 echo "Deleting old nodatron libraries directory " $LIB_DIR
-rm -rf $LIB_DIR/SimpleServo
-rm -rf $LIB_DIR/SimpleMessaging
+#rm -rf $LIB_DIR/SimpleServo
+#rm -rf $LIB_DIR/SimpleMessaging
 
 echo "Re-creating tmp dir " $TMP_DIR
 mkdir $TMP_DIR
@@ -50,4 +50,3 @@ echo "Uploading Nodatron to Arduino."
 ino upload
 
 echo "All Done! Good Nodatron!"
-

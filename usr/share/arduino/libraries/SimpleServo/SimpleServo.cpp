@@ -14,15 +14,31 @@ SimpleServo::SimpleServo()
     _timeElapsed      = 0;
 }
 
-void SimpleServo::processData(char * data){
-	if(SimpleMessaging::isForPin(_pin,data)){
-		
-	}
+void SimpleServo::processData(char data[]){
+    //isForPin(_pin,data);
+
+   char * seg = strtok (data,":");
+   int i = 0;
+   while (seg != NULL)
+   {
+      if(i==0){
+         if(atoi(seg) != _pin){
+           return;
+         }
+      }
+      else if(i==1){
+        setAngle(atoi(seg));
+      }
+
+      seg = strtok (NULL, ":");
+      i++;
+   }
+
 }
 
 void SimpleServo::attachPin(int pin){
-	_pin = pin;
-	
+        _pin = pin;
+
     if(_servo.attached())
         detach();
 
@@ -63,51 +79,50 @@ int SimpleServo::move(){
 
 int SimpleServo::move(int angle){
 
-	if(angle>180 || angle<0)//bounds check
-		return _curAngle;
+        if(angle>180 || angle<0)//bounds check
+                return _curAngle;
 
-	unsigned long currentMillis = millis();//always moving
+        unsigned long currentMillis = millis();//always moving
 
-	//do once per move
-	if(!_initMove){
-		_timeElapsed      = 0;
-		_targetAngle      = angle;
-		_moveStartTime    = currentMillis;
-		_initMove         = true;
-		_lastIntervalTime = _moveStartTime;
-	}
+        //do once per move
+        if(!_initMove){
+                _timeElapsed      = 0;
+                _targetAngle      = angle;
+                _moveStartTime    = currentMillis;
+                _initMove         = true;
+                _lastIntervalTime = _moveStartTime;
+        }
 
-	
-	
-	_timeElapsed = currentMillis - _lastIntervalTime;
-	
-	//did our set time interval satisfy?
-	if(_timeElapsed >= _timeInterval){
-		_lastIntervalTime = currentMillis;//slide over
-		_timeElapsed      = 0;//reset
 
-		if(_curAngle < _targetAngle){//we want to move forward
-			processMove();
-			_curAngle++;
-		}
-		else if(_curAngle > _targetAngle){//we want to move backward
-			processMove();
-			_curAngle--;
-		}
-		else{//pos has reached target _targetAngle
-			_initMove = false;//ready for next move
-		}
+        _timeElapsed = currentMillis - _lastIntervalTime;
 
-		return _curAngle;
-	}
-	else{//move did not occur in this cycle.
-		return -1;
-	}	
+        //did our set time interval satisfy?
+        if(_timeElapsed >= _timeInterval){
+                _lastIntervalTime = currentMillis;//slide over
+                _timeElapsed      = 0;//reset
+
+                if(_curAngle < _targetAngle){//we want to move forward
+                        processMove();
+                        _curAngle++;
+                }
+                else if(_curAngle > _targetAngle){//we want to move backward
+                        processMove();
+                        _curAngle--;
+                }
+                else{//pos has reached target _targetAngle
+                        _initMove = false;//ready for next move
+                }
+
+                return _curAngle;
+        }
+        else{//move did not occur in this cycle.
+                return -1;
+        }
 }
 
 void SimpleServo::processMove(){
-	if(_servo.attached()){
-		_servo.write(_curAngle);
-		Serial.println(_servo.read());
-	}	
+    if(_servo.attached()){
+        _servo.write(_curAngle);
+        Serial.println(_servo.read());
+    }
 }

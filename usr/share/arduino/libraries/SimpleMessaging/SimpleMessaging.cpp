@@ -1,4 +1,9 @@
+#include "SimpleMessaging.h"
 
-void isForPin(int * pin, char * msg){
-	
+SimpleMessaging::SimpleMessaging(){
+
+}
+
+void isForPin(int pin, char *data){
+
 }

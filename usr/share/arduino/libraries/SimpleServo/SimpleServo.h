@@ -9,8 +9,9 @@
 
 #include "Arduino.h"
 #include "Servo.h"
+#include "SimpleMessaging.h"
 
-class SimpleServo
+class SimpleServo : public SimpleMessaging
 {
     public:
         //This should be called at top of your file.
@@ -33,7 +34,7 @@ class SimpleServo
         //Kill the servo.
         void detach();
         //Process an incoming message.
-		void processData(char * data);
+        void processData(char data[]);
     private:
         //The servo object.
         Servo _servo;
@@ -52,11 +53,7 @@ class SimpleServo
         int _targetAngle;
         //Flag to trigger an action only once per unique move.
         boolean _initMove;
-		
-		void processMove();
+        void processMove();
 };
 
 #endif
-
-
-
