@@ -33,8 +33,6 @@ class SimpleServo : public SimpleMessaging
         void attachPin(int pin);
         //Kill the servo.
         void detach();
-        //Process an incoming message.
-        void processData(char data[]);
     private:
         //The servo object.
         Servo _servo;

@@ -14,28 +14,6 @@ SimpleServo::SimpleServo()
     _timeElapsed      = 0;
 }
 
-void SimpleServo::processData(char data[]){
-    //isForPin(_pin,data);
-
-   char * seg = strtok (data,":");
-   int i = 0;
-   while (seg != NULL)
-   {
-      if(i==0){
-         if(atoi(seg) != _pin){
-           return;
-         }
-      }
-      else if(i==1){
-        setAngle(atoi(seg));
-      }
-
-      seg = strtok (NULL, ":");
-      i++;
-   }
-
-}
-
 void SimpleServo::attachPin(int pin){
         _pin = pin;
 
