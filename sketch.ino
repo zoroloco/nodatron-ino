@@ -6,6 +6,8 @@ const int ledMotionPin     = A2;
 
 //digital pins
 const int motionSensor1Pin = 2;
+const int powerLedPin      = 4;
+const int tcpLedPin        = 7;
 const int servoBasePin     = 9;
 const int servoCamPin      = 10;
 
@@ -18,31 +20,37 @@ char receivedChars[numChars];
 
 void setup()
 {
+
+  //serial setup
   Serial.begin(9600);
+
+  //servo setup
   baseServo.attachPin(servoBasePin);
   camServo.attachPin(servoCamPin);
   baseServo.setSpeed(8);
   camServo.setSpeed(8);
 
-  //tell pi what you have attached.
-  Serial.println("BOOT_START");
-   Serial.println("LED:PIRLED:A2");
-   Serial.println("PIR:PIR1:2");
-   Serial.println("SERVO:BASE:9");
-   Serial.println("SERVO:CAM:10");
-  Serial.println("BOOT_END");
+  //led setup
+  pinMode(powerLedPin,OUTPUT);
+  pinMode(ledMotionPin,OUTPUT);
+  pinMode(tcpLedPin,OUTPUT);
+
+  Serial.println("BOOT_ARDUINO");
 }
 
 void loop()
 {
+  digitalWrite(powerLedPin,HIGH);
+
   rxData();
   if(newData == true){
      bool servoBaseFlag     = false;
      bool servoCamFlag      = false;
      bool ledMotionFlag     = false;
+     bool tcpLedFlag        = false;
      bool motionSensor1Flag = false;
 
-     char * seg = strtok (data,":");
+     char * seg = strtok ((char*)newData,":");
      int i = 0;
 
      while (seg != NULL)
@@ -59,12 +67,15 @@ void loop()
               case motionSensor1Pin:
                 motionSensor1Flag = true;
                 break;
+              case tcpLedPin:
+                tcpLedFlag = true;
+                break;
               default:
                 break;
              }
            }
            else{//analog pin
-             if( strcmp (seg,ledMotionPin) == 0){
+             if( strcmp (seg,"A2") == 0){
                ledMotionFlag = true;
              }
            }
@@ -81,6 +92,9 @@ void loop()
           }
           else if(motionSensor1Flag){
 
+          }
+          else if(tcpLedFlag){
+            digitalWrite(tcpLedPin,atoi(seg));
           }
         }
 
@@ -119,7 +133,7 @@ void rxData() {
     }
 }
 
-bool is_numeric(char *string)
+bool isNumeric(char *string)
 {
     int sizeOfString = strlen(string);
     int iteration = 0;
