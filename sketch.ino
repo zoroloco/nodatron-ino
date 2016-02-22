@@ -5,22 +5,25 @@
 const int ledMotionPin     = A2;
 
 //digital pins
-const int motionSensor1Pin = 2;
-const int powerLedPin      = 4;
-const int tcpLedPin        = 7;
-const int servoBasePin     = 9;
-const int servoCamPin      = 10;
+const int pirPin          = 2;
+const int powerLedPin     = 4;
+const int tcpLedPin       = 7;
+//const int streamButtonPin = 8;
+const int servoBasePin    = 9;
+const int servoCamPin     = 10;
 
 SimpleServo baseServo;
 SimpleServo camServo;
 
-const byte numChars = 32;
-boolean newData     = false;
+//globals
+int pirState          = LOW;             // we start, assuming no motion detected
+int streamButtonState = LOW;
+const byte numChars   = 32;
+bool  newDataFlag     = false;
 char receivedChars[numChars];
 
 void setup()
 {
-
   //serial setup
   Serial.begin(9600);
 
@@ -35,22 +38,28 @@ void setup()
   pinMode(ledMotionPin,OUTPUT);
   pinMode(tcpLedPin,OUTPUT);
 
-  Serial.println("BOOT_ARDUINO");
+  //sensor setup
+  pinMode(pirPin,INPUT);
+
+  //button setup
+  //pinMode(streamButtonPin,INPUT);
+
+  Serial.println("Z");
 }
 
 void loop()
 {
+  //turn power LED on
   digitalWrite(powerLedPin,HIGH);
 
   rxData();
-  if(newData == true){
+  if(newDataFlag){
      bool servoBaseFlag     = false;
      bool servoCamFlag      = false;
      bool ledMotionFlag     = false;
      bool tcpLedFlag        = false;
-     bool motionSensor1Flag = false;
 
-     char * seg = strtok ((char*)newData,":");
+     char * seg = strtok(receivedChars,":");
      int i = 0;
 
      while (seg != NULL)
@@ -63,9 +72,6 @@ void loop()
                 break;
               case servoCamPin:
                 servoCamFlag = true;
-                break;
-              case motionSensor1Pin:
-                motionSensor1Flag = true;
                 break;
               case tcpLedPin:
                 tcpLedFlag = true;
@@ -90,9 +96,6 @@ void loop()
           else if(ledMotionFlag){
             digitalWrite(ledMotionPin,atoi(seg));
           }
-          else if(motionSensor1Flag){
-
-          }
           else if(tcpLedFlag){
             digitalWrite(tcpLedPin,atoi(seg));
           }
@@ -102,12 +105,32 @@ void loop()
         i++;
      }
 
-     newData = false;//reset
+     newDataFlag = false;//reset
   }
 
-  //always move in loop.
+  detectStreamButton();
+  detectMotion();
   baseServo.move();
   camServo.move();
+}
+
+void detectStreamButton(){
+  
+}
+
+void detectMotion(){
+  if(digitalRead(pirPin)){
+    if(pirState==LOW){
+      Serial.println("PIR1:1");
+      pirState = HIGH;
+    }
+  }
+  else{
+    if(pirState==HIGH){
+      Serial.println("PIR1:0");
+      pirState = LOW;
+    }
+  }
 }
 
 void rxData() {
@@ -115,7 +138,7 @@ void rxData() {
         char endMarker = '\n';
         char rc;
 
-    while (Serial.available() > 0 && newData == false) {
+    while (Serial.available() > 0 && newDataFlag == false) {
         rc = Serial.read();
 
         if (rc != endMarker) {
@@ -128,7 +151,7 @@ void rxData() {
         else {
           receivedChars[ndx] = '\0'; // terminate the string
           ndx = 0;
-          newData = true;
+          newDataFlag = true;
         }
     }
 }
