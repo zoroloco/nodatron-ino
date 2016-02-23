@@ -6,9 +6,8 @@ const int ledMotionPin     = A2;
 
 //digital pins
 const int pirPin          = 2;
-const int powerLedPin     = 4;
+const int streamButtonPin = 4;
 const int tcpLedPin       = 7;
-//const int streamButtonPin = 8;
 const int servoBasePin    = 9;
 const int servoCamPin     = 10;
 
@@ -16,10 +15,11 @@ SimpleServo baseServo;
 SimpleServo camServo;
 
 //globals
-int pirState          = LOW;             // we start, assuming no motion detected
-int streamButtonState = LOW;
-const byte numChars   = 32;
-bool  newDataFlag     = false;
+int pirState             = LOW;
+int streamButtonState    = 0;
+bool streamButtonPressed = false;
+const byte numChars      = 32;
+bool  newDataFlag        = false;
 char receivedChars[numChars];
 
 void setup()
@@ -34,7 +34,6 @@ void setup()
   camServo.setSpeed(8);
 
   //led setup
-  pinMode(powerLedPin,OUTPUT);
   pinMode(ledMotionPin,OUTPUT);
   pinMode(tcpLedPin,OUTPUT);
 
@@ -42,16 +41,13 @@ void setup()
   pinMode(pirPin,INPUT);
 
   //button setup
-  //pinMode(streamButtonPin,INPUT);
+  pinMode(streamButtonPin,INPUT);
 
   Serial.println("Z");
 }
 
 void loop()
 {
-  //turn power LED on
-  digitalWrite(powerLedPin,HIGH);
-
   rxData();
   if(newDataFlag){
      bool servoBaseFlag     = false;
@@ -115,7 +111,23 @@ void loop()
 }
 
 void detectStreamButton(){
-  
+  if(digitalRead(streamButtonPin)){
+    streamButtonPressed = true;
+  }
+  else{
+    if(streamButtonPressed){
+      streamButtonPressed = false;
+
+      if(streamButtonState){
+        Serial.println("BTN1:0");
+        streamButtonState = 0;
+      }
+      else{
+        Serial.println("BTN1:1");
+        streamButtonState = 1;
+      }
+    }
+  }
 }
 
 void detectMotion(){
