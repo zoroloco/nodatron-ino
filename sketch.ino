@@ -119,11 +119,11 @@ void detectStreamButton(){
       streamButtonPressed = false;
 
       if(streamButtonState){
-        Serial.println("BTN1:0");
+        Serial.println("streamButton:0");
         streamButtonState = 0;
       }
       else{
-        Serial.println("BTN1:1");
+        Serial.println("streamButton:1");
         streamButtonState = 1;
       }
     }
@@ -133,13 +133,13 @@ void detectStreamButton(){
 void detectMotion(){
   if(digitalRead(pirPin)){
     if(pirState==LOW){
-      Serial.println("PIR1:1");
+      Serial.println("pirSensor:1");
       pirState = HIGH;
     }
   }
   else{
     if(pirState==HIGH){
-      Serial.println("PIR1:0");
+      Serial.println("pirSensor:0");
       pirState = LOW;
     }
   }
