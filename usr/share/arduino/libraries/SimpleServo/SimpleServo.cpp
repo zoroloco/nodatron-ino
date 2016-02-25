@@ -101,6 +101,6 @@ int SimpleServo::move(int angle){
 void SimpleServo::processMove(){
     if(_servo.attached()){
         _servo.write(_curAngle);
-        Serial.println(_servo.read());
+        //Serial.println(_servo.read());
     }
 }

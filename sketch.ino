@@ -43,7 +43,7 @@ void setup()
   //button setup
   pinMode(streamButtonPin,INPUT);
 
-  Serial.println("Z");
+  Serial.println("{Z}");
 }
 
 void loop()
@@ -119,11 +119,11 @@ void detectStreamButton(){
       streamButtonPressed = false;
 
       if(streamButtonState){
-        Serial.println("streamButton:0");
+        Serial.println("{streamButton:0}");
         streamButtonState = 0;
       }
       else{
-        Serial.println("streamButton:1");
+        Serial.println("{streamButton:1}");
         streamButtonState = 1;
       }
     }
@@ -133,13 +133,13 @@ void detectStreamButton(){
 void detectMotion(){
   if(digitalRead(pirPin)){
     if(pirState==LOW){
-      Serial.println("pirSensor:1");
+      Serial.println("{pirSensor:1}");
       pirState = HIGH;
     }
   }
   else{
     if(pirState==HIGH){
-      Serial.println("pirSensor:0");
+      Serial.println("{pirSensor:0}");
       pirState = LOW;
     }
   }
