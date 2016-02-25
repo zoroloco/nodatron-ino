@@ -5,7 +5,7 @@
 const int ledMotionPin     = A2;
 
 //digital pins
-const int pirPin          = 2;
+const int pirFrontPin     = 2;
 const int streamButtonPin = 4;
 const int tcpLedPin       = 7;
 const int servoBasePin    = 9;
@@ -15,7 +15,7 @@ SimpleServo baseServo;
 SimpleServo camServo;
 
 //globals
-int pirState             = LOW;
+int pirFrontState        = LOW;
 int streamButtonState    = 0;
 bool streamButtonPressed = false;
 const byte numChars      = 32;
@@ -38,12 +38,12 @@ void setup()
   pinMode(tcpLedPin,OUTPUT);
 
   //sensor setup
-  pinMode(pirPin,INPUT);
+  pinMode(pirFrontPin,INPUT);
 
   //button setup
   pinMode(streamButtonPin,INPUT);
 
-  Serial.println("{Z}");
+  //Serial.println("{Z}");
 }
 
 void loop()
@@ -131,16 +131,16 @@ void detectStreamButton(){
 }
 
 void detectMotion(){
-  if(digitalRead(pirPin)){
-    if(pirState==LOW){
-      Serial.println("{pirSensor:1}");
-      pirState = HIGH;
+  if(digitalRead(pirFrontPin)){
+    if(pirFrontState==LOW){
+      Serial.println("{pirSensorFront:1}");
+      pirFrontState = HIGH;
     }
   }
   else{
-    if(pirState==HIGH){
-      Serial.println("{pirSensor:0}");
-      pirState = LOW;
+    if(pirFrontState==HIGH){
+      Serial.println("{pirSensorFront:0}");
+      pirFrontState = LOW;
     }
   }
 }
