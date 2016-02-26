@@ -1,13 +1,22 @@
 #include<SimpleServo.h>
 #include<Servo.h>
 
-//analog pins
-const int ledMotionPin     = A2;
-
 //digital pins
-const int pirFrontPin     = 2;
-const int streamButtonPin = 4;
-const int tcpLedPin       = 7;
+
+//leds
+const int powerLedPin     = 2;
+const int activityLedPin  = 3;
+const int motionLedPin    = 4;
+const int tcpLedPin       = 5;
+
+//buttons
+const int powerButtonPin  = 6;
+
+//sensors
+const int pirFrontPin     = 7;
+//const int pirSidePin      = 8;reserved
+
+//servos
 const int servoBasePin    = 9;
 const int servoCamPin     = 10;
 
@@ -16,8 +25,8 @@ SimpleServo camServo;
 
 //globals
 int pirFrontState        = LOW;
-int streamButtonState    = 0;
-bool streamButtonPressed = false;
+int powerButtonState     = 0;
+bool powerButtonPressed  = false;
 const byte numChars      = 32;
 bool  newDataFlag        = false;
 char receivedChars[numChars];
@@ -34,14 +43,17 @@ void setup()
   camServo.setSpeed(8);
 
   //led setup
-  pinMode(ledMotionPin,OUTPUT);
+  pinMode(powerLedPin,OUTPUT);
+  pinMode(activityLedPin,OUTPUT);
+  pinMode(motionLedPin,OUTPUT);
   pinMode(tcpLedPin,OUTPUT);
 
   //sensor setup
   pinMode(pirFrontPin,INPUT);
+  //pinMode(pirSidePin,INPUT);
 
   //button setup
-  pinMode(streamButtonPin,INPUT);
+  pinMode(powerButtonPin,INPUT);
 
   //Serial.println("{Z}");
 }
@@ -52,7 +64,10 @@ void loop()
   if(newDataFlag){
      bool servoBaseFlag     = false;
      bool servoCamFlag      = false;
-     bool ledMotionFlag     = false;
+
+     bool powerLedFlag      = false;
+     bool activityLedFlag   = false;
+     bool motionLedFlag     = false;
      bool tcpLedFlag        = false;
 
      char * seg = strtok(receivedChars,":");
@@ -69,16 +84,39 @@ void loop()
               case servoCamPin:
                 servoCamFlag = true;
                 break;
+              case powerLedPin:
+                powerLedFlag = true;
+                break;
+              case activityLedPin:
+                activityLedFlag = true;
+                break;
+              case motionLedPin:
+                motionLedFlag = true;
+                break;
               case tcpLedPin:
                 tcpLedFlag = true;
-                break;
               default:
                 break;
              }
            }
            else{//analog pin
-             if( strcmp (seg,"A2") == 0){
-               ledMotionFlag = true;
+             if( strcmp (seg,"A0") == 0){
+
+             }
+             else if( strcmp (seg, "A1") == 0){
+
+             }
+             else if( strcmp (seg, "A2") == 0){
+
+             }
+             else if( strcmp (seg, "A3") == 0){
+
+             }
+             else if( strcmp (seg, "A4") == 0){
+
+             }
+             else if( strcmp (seg, "A5") == 0){
+
              }
            }
         }
@@ -89,8 +127,14 @@ void loop()
           else if(servoCamFlag){
             camServo.setAngle(atoi(seg));
           }
-          else if(ledMotionFlag){
-            digitalWrite(ledMotionPin,atoi(seg));
+          else if(powerLedFlag){
+            digitalWrite(powerLedPin,atoi(seg));
+          }
+          else if(activityLedFlag){
+            digitalWrite(activityLedPin,atoi(seg));
+          }
+          else if(motionLedFlag){
+            digitalWrite(motionLedPin,atoi(seg));
           }
           else if(tcpLedFlag){
             digitalWrite(tcpLedPin,atoi(seg));
@@ -104,27 +148,27 @@ void loop()
      newDataFlag = false;//reset
   }
 
-  detectStreamButton();
+  detectPowerButton();
   detectMotion();
   baseServo.move();
   camServo.move();
 }
 
-void detectStreamButton(){
-  if(digitalRead(streamButtonPin)){
-    streamButtonPressed = true;
+void detectPowerButton(){
+  if(digitalRead(powerButtonPin)){
+    powerButtonPressed = true;
   }
   else{
-    if(streamButtonPressed){
-      streamButtonPressed = false;
+    if(powerButtonPressed){
+      powerButtonPressed = false;
 
-      if(streamButtonState){
-        Serial.println("{streamButton:0}");
-        streamButtonState = 0;
+      if(powerButtonState){
+        Serial.println("{powerButton:0}");
+        powerButtonState = 0;
       }
       else{
-        Serial.println("{streamButton:1}");
-        streamButtonState = 1;
+        Serial.println("{powerButton:1}");
+        powerButtonState = 1;
       }
     }
   }
