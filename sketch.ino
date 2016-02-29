@@ -14,7 +14,8 @@ const int powerButtonPin  = 6;
 
 //sensors
 const int pirFrontPin     = 7;
-//const int pirSidePin      = 8;reserved
+const int pirLeftPin      = 8;
+const int pirRightPin     = 11;
 
 //servos
 const int servoBasePin    = 9;
@@ -25,6 +26,8 @@ SimpleServo camServo;
 
 //globals
 int pirFrontState        = LOW;
+int pirLeftState         = LOW;
+int pirRightState        = LOW;
 int powerButtonState     = 0;
 bool powerButtonPressed  = false;
 const byte numChars      = 32;
@@ -50,7 +53,8 @@ void setup()
 
   //sensor setup
   pinMode(pirFrontPin,INPUT);
-  //pinMode(pirSidePin,INPUT);
+  pinMode(pirLeftPin,INPUT);
+  pinMode(pirRightPin,INPUT);
 
   //button setup
   pinMode(powerButtonPin,INPUT);
@@ -149,7 +153,9 @@ void loop()
   }
 
   detectPowerButton();
-  detectMotion();
+  detectFrontMotion();
+  detectLeftMotion();
+  detectRightMotion();
   baseServo.move();
   camServo.move();
 }
@@ -174,7 +180,7 @@ void detectPowerButton(){
   }
 }
 
-void detectMotion(){
+void detectFrontMotion(){
   if(digitalRead(pirFrontPin)){
     if(pirFrontState==LOW){
       Serial.println("{pirSensorFront:1}");
@@ -185,6 +191,36 @@ void detectMotion(){
     if(pirFrontState==HIGH){
       Serial.println("{pirSensorFront:0}");
       pirFrontState = LOW;
+    }
+  }
+}
+
+void detectLeftMotion(){
+  if(digitalRead(pirLeftPin)){
+    if(pirLeftState==LOW){
+      Serial.println("{pirSensorLeft:1}");
+      pirLeftState = HIGH;
+    }
+  }
+  else{
+    if(pirLeftState==HIGH){
+      Serial.println("{pirSensorLeft:0}");
+      pirLeftState = LOW;
+    }
+  }
+}
+
+void detectRightMotion(){
+  if(digitalRead(pirRightPin)){
+    if(pirRightState==LOW){
+      Serial.println("{pirSensorRight:1}");
+      pirRightState = HIGH;
+    }
+  }
+  else{
+    if(pirRightState==HIGH){
+      Serial.println("{pirSensorRight:0}");
+      pirRightState = LOW;
     }
   }
 }
