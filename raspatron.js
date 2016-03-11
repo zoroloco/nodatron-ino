@@ -6,7 +6,7 @@ var nodatron = require('./node_modules/nodatron/lib/nodatron.js'),
     cp       = require('child_process');
 
 var arduino = new nodatron({"device" : "/dev/ttyACM0","baud" : 9600});
-var server  = new tcpServer(8171);
+var server  = new tcpServer(8170);
 
 arduino.enableConsole();
 
@@ -29,9 +29,12 @@ arduino.on("connected", function(){
     function(data){//got data
       log.info("TCP server received data from a client."+data);
 
+      //convert buffer to string
+      var dataStr = data.toString('utf8');
+
       //TODO: do proper parsing and message handling.
       //lets just get the servos back working again remotely.
-      var splitData = data.split(":");
+      var splitData = dataStr.split(":");
       if(!_.isEmpty(splitData[0])){
         if(splitData[0] == "9"){
           baseServo.move(splitData[1]);
