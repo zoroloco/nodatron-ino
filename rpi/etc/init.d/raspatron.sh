@@ -15,7 +15,7 @@
 #
 
 # Change the next 3 lines to suit where you install your script and what you want to call it
-DIR=/usr/local/src/raspatron
+DIR=/usr/local/src
 DAEMON=$DIR/raspatron.sh
 DAEMON_NAME=raspatron
 
@@ -40,14 +40,16 @@ do_stop () {
     log_daemon_msg "Stopping system $DAEMON_NAME daemon"
     start-stop-daemon --stop --signal TERM --pidfile $PIDFILE
     killall raspatron
+    killall nodatron
 
-    if pgrep mjpg_streamer
-    then
-      kill $(pgrep mjpg_streamer) > /dev/null 2>&1
-      echo "mjpg_streamer stopped"
-    else
-      echo "mjpg_streamer not running"
-    fi
+if pgrep mjpg_streamer
+then
+  kill $(pgrep mjpg_streamer) > /dev/null 2>&1
+  echo "mjpg_streamer stopped"
+else
+  echo "mjpg_streamer not running"
+fi
+
 
     log_end_msg $?
 }

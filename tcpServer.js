@@ -9,8 +9,6 @@ var pathUtil = require('path'),
       this._port   = port;
       this._server;
 
-      //log.info("Echoing out network settings of the server:"+JSON.stringify(os.networkInterfaces()));
-
     	TcpServer.prototype.shutdown = function(cb){
     		log.warn("Shutting down tcp server.");
         if(!_.isEmpty(self._server)){

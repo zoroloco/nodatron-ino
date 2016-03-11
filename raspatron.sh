@@ -17,5 +17,4 @@ fi
 
 #start raspatron node js
 echo "Starting raspatron..."
-cd /user/local/src/raspatron
-sudo npm start
+sudo node /usr/local/src/raspatron/raspatron.js

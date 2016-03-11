@@ -1,9 +1,12 @@
 var nodatron = require('./node_modules/nodatron/lib/nodatron.js'),
     pathUtil = require('path'),
+    _        = require('underscore'),
     log      = require(pathUtil.join(__dirname,'./logger.js')),
+    tcpServer= require(pathUtil.join(__dirname,'./tcpServer.js')),
     cp       = require('child_process');
 
 var arduino = new nodatron({"device" : "/dev/ttyACM0","baud" : 9600});
+var server  = new tcpServer(8171);
 
 arduino.enableConsole();
 
@@ -19,11 +22,34 @@ arduino.on("connected", function(){
   var baseServo         = arduino.createServo(9);
   var camServo          = arduino.createServo(10);
 
+  server.connect(
+    function(remoteIP){//connected
+      log.info("Client has connected from remote IP address:"+remoteIP);
+    },
+    function(data){//got data
+      log.info("TCP server received data from a client."+data);
+
+      //TODO: do proper parsing and message handling.
+      //lets just get the servos back working again remotely.
+      var splitData = data.split(":");
+      if(!_.isEmpty(splitData[0])){
+        if(splitData[0] == "9"){
+          baseServo.move(splitData[1]);
+        }
+        else if(splitData[0] == "10"){
+          camServo.move(splitData[1]);
+        }
+      }
+    },
+    function(){//error
+      log.error("TCP server had an error.");
+    });
+
   powerButton.on('on',function(){
     powerLed.turnOn();
     panCenter();
 
-    executeCommand("/usr/local/src/startStream.sh",function(result,msg){
+    executeCommand("/usr/local/src/raspatron/startStream.sh",function(result,msg){
       if(result){
         console.info(msg);
       }
@@ -40,7 +66,7 @@ arduino.on("connected", function(){
     activityLed.turnOff();
     sleepCam();
 
-    executeCommand("/usr/local/src/stopStream.sh",function(result,msg){
+    executeCommand("/usr/local/src/raspatron/stopStream.sh",function(result,msg){
       if(result){
         console.info(msg);
       }
