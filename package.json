@@ -1,25 +1,21 @@
 {
-  "name": "nodatron",
-  "version": "1.0.0",
-  "description": "Uses python serial for 2 way communication to board.",
-  "main": "node lib/nodatron.js",
+  "name": "raspatron",
+  "version": "0.0.1",
+  "description": "Robot that utilizes the nodatron framework.",
+  "main": "node raspatron.js",
   "scripts": {
-    "button": "node samples/button/button.js",
-    "sensor": "node samples/hcsr501/sensor.js",
-    "led": "node samples/led/led.js",
-    "servo": "node samples/servo/servo.js",
-    "robot": "node samples/robot/robot.js",
-    "stop": "killall -SIGINT node",
-    "test": "node test/test/test.js"
+    "start": "node raspatron.js",
+    "stop": "killall -SIGINT node"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zoroloco/nodatron-js.git"
+    "url": "git+https://github.com/zoroloco/raspatron.git"
   },
   "keywords": [
     "arduino",
     "robotics",
-    "python serial"
+    "python serial",
+    "nodatron"
   ],
   "author": {
     "name": "Kenneth Centurion"
@@ -30,13 +26,14 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zoroloco/nodatron-js/issues",
+    "url": "https://github.com/zoroloco/raspatron/issues",
     "email": "kcenturion@yahoo.com"
   },
-  "homepage": "https://github.com/zoroloco/nodatron-js#readme",
+  "homepage": "https://github.com/zoroloco/raspatron#readme",
   "dependencies": {
     "winston": "^2.1.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "nodatron"  : "^1.0.0"
   },
   "engines": {
     "node": "^4.3.0"

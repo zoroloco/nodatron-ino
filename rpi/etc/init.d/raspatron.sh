@@ -1,23 +1,23 @@
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:          nodatron
+# Provides:          raspatron
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Runs nodatron
-# Description:       Runs nodatron
+# Short-Description: Runs raspatron
+# Description:       Runs raspatron
 ### END INIT INFO
 #
-# NOTE: sudo update-rc.d nodatron.sh defaults (will add this to startup script)
-# NOTE: run with:  /etc/init.d/nodatron.sh start | stop
+# NOTE: sudo update-rc.d raspatron.sh defaults (will add this to startup script)
+# NOTE: run with:  /etc/init.d/raspatron.sh start | stop
 #
 
 # Change the next 3 lines to suit where you install your script and what you want to call it
-DIR=/usr/local/src
-DAEMON=$DIR/nodatron.sh
-DAEMON_NAME=nodatron
+DIR=/usr/local/src/raspatron
+DAEMON=$DIR/raspatron.sh
+DAEMON_NAME=raspatron
 
 # Add any command line options for your daemon here
 DAEMON_OPTS=""
@@ -39,7 +39,7 @@ do_start () {
 do_stop () {
     log_daemon_msg "Stopping system $DAEMON_NAME daemon"
     start-stop-daemon --stop --signal TERM --pidfile $PIDFILE
-    killall nodatron
+    killall raspatron
 
     if pgrep mjpg_streamer
     then

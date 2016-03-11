@@ -1,19 +1,46 @@
 #!/bin/sh
-# nodatron.sh
-#
-# chmod +x nodatron.sh
+# Grabs latest code from github.
 #
 
-#start the video stream
-echo "Starting video stream..."
-if pgrep mjpg_streamer > /dev/null
-then
-  echo "mjpg_streamer already running"
-else
-  LD_LIBRARY_PATH=/opt/mjpg-streamer/ /opt/mjpg-streamer/mjpg_streamer -i "input_raspicam.so -fps 15 -q 50 -x 640 -y 480" -o "output_http.so -p 8171 -w /opt/mjpg-streamer/www -c $
-  echo "mjpg_streamer started"
-fi
+SRC_DIR = "/usr/local/src/"
+SKETCH_DIR = $SRC_DIR/arduino
+TMP_DIR = "/tmp/raspatron"
 
-#start nodatron node js
-echo "Starting nodatron..."
-sudo node /usr/local/src/node_modules/nodatron/test/test.js
+clear
+
+echo "Executing update script."
+
+echo "Deleting old tmp dir" $TMP_DIR
+rm -rf $TMP_DIR
+
+echo "Deleting old raspatron dir"
+rm -rf $SRC_DIR/raspatron
+
+echo "Re-creating tmp dir " $TMP_DIR
+mkdir $TMP_DIR
+
+echo "Retrieving latest repo: git clone https://github.com/zoroloco/raspatron.git " $TMP_DIR
+git clone https://github.com/zoroloco/raspatron.git $TMP_DIR
+
+echo "Moving latest sketch file to " $SKETCH_DIR/src
+cp $TMP_DIR/arduino/sketch.ino $SKETCH_DIR/src
+
+echo "Moving latest raspatron source to " $SRC_DIR
+cp -R $TMP_DIR $SRC_DIR
+
+echo "Cleaning up " $TMP_DIR
+rm -rf $TMP_DIR
+
+echo "Now building latest Raspatron."
+cd $SKETCH_DIR
+ino build
+sleep 5
+echo "Uploading Raspatron to Arduino."
+ino upload
+
+echo "Now installing dependencies."
+cd $SRC_DIR/raspatron
+sudo npm install
+
+echo "Now running raspatron."
+sudo npm start

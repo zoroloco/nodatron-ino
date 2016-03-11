@@ -1,7 +1,8 @@
 #!/bin/sh
-# nodatron.sh
 #
-# chmod +x nodatron.sh
+# raspatron.sh
+#
+# chmod +x raspatron.sh
 #
 
 #start the video stream
@@ -14,6 +15,7 @@ else
   echo "mjpg_streamer started"
 fi
 
-#start nodatron node js
-echo "Starting nodatron..."
-sudo node /usr/local/src/node_modules/nodatron/test/test.js
+#start raspatron node js
+echo "Starting raspatron..."
+cd /user/local/src/raspatron
+sudo npm start

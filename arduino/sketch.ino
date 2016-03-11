@@ -58,8 +58,6 @@ void setup()
 
   //button setup
   pinMode(powerButtonPin,INPUT);
-
-  //Serial.println("{Z}");
 }
 
 void loop()
