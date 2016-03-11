@@ -1,45 +1,34 @@
-# nodatron-ino
+# raspatron.
 
-This project contains the code that will be compiled and uploaded to the Arduino. 
-This code is made to run on the Arduino R3 and if you want the build scrip to run,
-then you must be working on a Linux system. This whole Nodatron project is meant to run
-on a raspberry pi 2.
+This is a robot that utilizes the Nodatron framework.
 
-Step 1 - install below:
-Thanks to: https://github.com/amperka/ino
-git clone git://github.com/amperka/ino.git
-make install 
+It has 2 hi-tech 311 servos that pan and tilt a camera.  The camera
+is a raspberry pi camera module connected to a raspberry pi.
+The pi will be running this code that controls the Arduino components.
 
-mkdir /usr/local/src/arduino
-cd /usr/local/src/arduino
-ino init -t blink (creates initial sketch)
+The robot will have 3 sensors.  Left, Right and front.
 
-You now have your source tree for a sketch.
+If a sensor is triggered, then the camera will move to face the sensor and the motion
+led will blink.
 
-Now install Arduino software on your Pi.
-apt-get install arduino
+The robot also has an on/off button.  If off, then the sensors are disabled, the
+streaming feed from the camera is turned off and all leds are turned off.
+
+The robot can also accept a TCP connection.  When a remote connection is made, the
+blue LED will turn on.
+
+Whenever there is activity on the robot, the yellow activity LED will blink.
+
+If you press the power button and it was previously off, then the camera will tilt upwards
+(wake up) and the sensors will be enabled again.  The video stream will also be started again.
+The red LED power light will also turn on.
+
+#remote control it
+
+Download and run the associated IOS app called raspatron-app.
+
+https://github.com/zoroloco/raspatron-app
 
 
-This project is bundled with a helpful script that you can place in /usr/local/src.  
-The script will download the latest code from the repo and move the files and libraries
-to the correct places and build the INO and upload it to the Arduino.  Of course you must have
-the command-line INO tool installed that was mentioned above.
-
-
-I have created helper libraries for different components prefixed with the word "Simple"
-
-Derived from these classes are classes that can handle messages from the serial port. 
-
-
-Message format:
-
-Byte  0   = 0-D Hexadecimal value of the Pin (0-13)
-Byte  1   = A,D A=analog pin.  D=digital pin.
-Bytes 2,3 = First command (0-255 bits represented in HEX 0-F)
-Bytes 4,5 = Second command 
-
-Example:
-
-AD05B4 - On digital pin 10, the first command is a 5 and the second command is a 180.
-
-The code will know that pin 10 is a servo and tell it to move 180 degrees at speed 5.
+Note:  You will need to open a port for the video streaming and another port if you want
+to accept remote TCP connections.
