@@ -1,3 +1,4 @@
+#include<SoftwareSerial.h>
 #include<SimpleServo.h>
 #include<Servo.h>
 
@@ -8,6 +9,11 @@ const int powerLedPin     = 2;
 const int activityLedPin  = 3;
 const int motionLedPin    = 4;
 const int tcpLedPin       = 5;
+
+//emic 2 speech module
+const int soutPin         = 13;
+const int sinPin          = 12;
+SoftwareSerial emicSerial = SoftwareSerial(soutPin,sinPin);
 
 //buttons
 const int powerButtonPin  = 6;
@@ -58,6 +64,15 @@ void setup()
 
   //button setup
   pinMode(powerButtonPin,INPUT);
+
+  //emic 2 speech module setup
+  pinMode(soutPin,INPUT);
+  pinMode(sinPin,OUTPUT);
+  emicSerial.begin(9600);
+  emicSerial.print('\n');
+  while(emicSerial.read() != ':');
+  delay(10);
+  emicSerial.flush();
 }
 
 void loop()
@@ -71,6 +86,8 @@ void loop()
      bool activityLedFlag   = false;
      bool motionLedFlag     = false;
      bool tcpLedFlag        = false;
+
+     bool emicFlag          = false;
 
      char * seg = strtok(receivedChars,":");
      int i = 0;
@@ -97,6 +114,8 @@ void loop()
                 break;
               case tcpLedPin:
                 tcpLedFlag = true;
+              case sinPin:
+                emicFlag = true;
               default:
                 break;
              }
@@ -140,6 +159,10 @@ void loop()
           }
           else if(tcpLedFlag){
             digitalWrite(tcpLedPin,atoi(seg));
+          }
+          else if(emicFlag){
+            emicSerial.print('S');
+            emicSerial.print(seg);
           }
         }
 

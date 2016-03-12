@@ -25,6 +25,7 @@ arduino.on("connected", function(){
   server.connect(
     function(remoteIP){//connected
       log.info("Client has connected from remote IP address:"+remoteIP);
+      connectivityLed.turnOn();
     },
     function(data){//got data
       log.info("TCP server received data from a client."+data);
@@ -46,6 +47,7 @@ arduino.on("connected", function(){
     },
     function(){//error
       log.error("TCP server had an error.");
+      connectivityLed.turnOff();
     });
 
   powerButton.on('on',function(){
