@@ -21,10 +21,12 @@ arduino.on("connected", function(){
   var motionSensorRight = arduino.createPir(11);
   var baseServo         = arduino.createServo(9);
   var camServo          = arduino.createServo(10);
+  var speechModule      = arduino.createEmicToSpeech(12);
 
   server.connect(
     function(remoteIP){//connected
       log.info("Client has connected from remote IP address:"+remoteIP);
+      speechModule.speak("Remote client has connected.");
       connectivityLed.turnOn();
     },
     function(data){//got data
@@ -47,10 +49,12 @@ arduino.on("connected", function(){
     },
     function(){//error
       log.error("TCP server had an error.");
+      speechModule.speak("Remote client has disconnected.");
       connectivityLed.turnOff();
     });
 
   powerButton.on('on',function(){
+    speechModule.speak("Raspatron powering on.");
     powerLed.turnOn();
     panCenter();
 
@@ -65,6 +69,7 @@ arduino.on("connected", function(){
   });
 
   powerButton.on('off',function(){
+    speechModule.speak("Raspatron powering off.");
     powerLed.turnOff();
     motionLed.turnOff();
     connectivityLed.turnOff();
@@ -173,6 +178,7 @@ arduino.on("connected", function(){
       msg += err;
     }
     log.error(msg);
+    process.exit(1);
   });
 
 });

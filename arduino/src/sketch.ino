@@ -190,12 +190,20 @@ void detectPowerButton(){
       powerButtonPressed = false;
 
       if(powerButtonState){
-        Serial.println("{powerButton:0}");
-        powerButtonState = 0;
+        String msg = "{";
+        msg.concat(powerButtonPin);
+        msg.concat(":0}");
+        Serial.println(msg);
+
+        powerButtonState = LOW;
       }
       else{
-        Serial.println("{powerButton:1}");
-        powerButtonState = 1;
+        String msg = "{";
+        msg.concat(powerButtonPin);
+        msg.concat(":1}");
+        Serial.println(msg);
+
+        powerButtonState = HIGH;
       }
     }
   }
@@ -204,13 +212,21 @@ void detectPowerButton(){
 void detectFrontMotion(){
   if(digitalRead(pirFrontPin)){
     if(pirFrontState==LOW){
-      Serial.println("{pirSensorFront:1}");
+      String msg = "{";
+      msg.concat(pirFrontPin);
+      msg.concat(":1}");
+      Serial.println(msg);
+
       pirFrontState = HIGH;
     }
   }
   else{
     if(pirFrontState==HIGH){
-      Serial.println("{pirSensorFront:0}");
+      String msg = "{";
+      msg.concat(pirFrontPin);
+      msg.concat(":0}");
+      Serial.println(msg);
+
       pirFrontState = LOW;
     }
   }
@@ -219,13 +235,21 @@ void detectFrontMotion(){
 void detectLeftMotion(){
   if(digitalRead(pirLeftPin)){
     if(pirLeftState==LOW){
-      Serial.println("{pirSensorLeft:1}");
+      String msg = "{";
+      msg.concat(pirLeftPin);
+      msg.concat(":1}");
+      Serial.println(msg);
+
       pirLeftState = HIGH;
     }
   }
   else{
     if(pirLeftState==HIGH){
-      Serial.println("{pirSensorLeft:0}");
+      String msg = "{";
+      msg.concat(pirLeftPin);
+      msg.concat(":0}");
+      Serial.println(msg);
+
       pirLeftState = LOW;
     }
   }
@@ -234,13 +258,21 @@ void detectLeftMotion(){
 void detectRightMotion(){
   if(digitalRead(pirRightPin)){
     if(pirRightState==LOW){
-      Serial.println("{pirSensorRight:1}");
+      String msg = "{";
+      msg.concat(pirRightPin);
+      msg.concat(":1}");
+      Serial.println(msg);
+
       pirRightState = HIGH;
     }
   }
   else{
     if(pirRightState==HIGH){
-      Serial.println("{pirSensorRight:0}");
+      String msg = "{";
+      msg.concat(pirRightPin);
+      msg.concat(":0}");
+      Serial.println(msg);
+
       pirRightState = LOW;
     }
   }
