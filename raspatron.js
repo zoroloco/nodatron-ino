@@ -159,11 +159,13 @@ arduino.on("connected", function(){
   process.on('SIGTERM', function() {//called from /etc/init.d/nodatron.sh from kill pid
     log.info("Got kill signal. Exiting.");
     arduino.shutdown();
+    server.shutdown();
   });
 
   process.on('SIGINT', function() {
     log.warn("Caught interrupt signal(Ctrl-C)");
     arduino.shutdown();
+    server.shutdown();
   });
 
   process.on('exit', function(){
@@ -178,6 +180,9 @@ arduino.on("connected", function(){
       msg += err;
     }
     log.error(msg);
+    arduino.shutdown();
+    server.shutdown();
+
     process.exit(1);
   });
 
