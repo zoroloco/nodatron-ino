@@ -29,7 +29,7 @@ chmod +x /usr/local/src/raspatron/raspatron.sh
 echo "moving and updating startup script"
 sudo cp /usr/local/src/raspatron/rpi/etc/init.d/raspatron.sh /etc/init.d
 sudo chmod +x /etc/init.d/raspatron.sh
-update.rc.d /etc/init.d/raspatron.sh defaults
+sudo update-rc.d /etc/init.d/raspatron.sh defaults
 
 echo "Now running raspatron."
 sudo npm start
