@@ -1,5 +1,15 @@
 # raspatron.
 
+1.) Move update-raspatron.sh to /usr/local/src
+2.) Run update-raspatron.sh
+3.) You now have latest code.
+
+OR
+
+git clone https://github.com/zoroloco/raspatron.git
+
+#about
+
 This is a robot that utilizes the Nodatron framework.
 
 It has 2 hi-tech 311 servos that pan and tilt a camera.  The camera

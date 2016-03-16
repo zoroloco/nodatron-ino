@@ -21,5 +21,10 @@ echo "Now installing dependencies."
 cd /usr/local/src/raspatron
 sudo npm install
 
+echo "making scripts executable"
+chmod +x /usr/local/src/raspatron/startStream.sh
+chmod +x /usr/local/src/raspatron/stopStream.sh
+chmod +x /usr/local/src/raspatron/raspatron.sh
+
 echo "Now running raspatron."
 sudo npm start
