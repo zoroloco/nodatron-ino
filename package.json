@@ -1,6 +1,6 @@
 {
   "name": "raspatron",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Robot that utilizes the nodatron framework.",
   "main": "node raspatron.js",
   "scripts": {
@@ -13,8 +13,9 @@
   },
   "keywords": [
     "arduino",
+    "maestro",
     "robotics",
-    "python serial",
+    "pyserial",
     "nodatron"
   ],
   "author": {
@@ -33,7 +34,7 @@
   "dependencies": {
     "winston": "^2.1.1",
     "underscore": "^1.8.3",
-    "nodatron"  : "^1.0.0"
+    "nodatron"  : "^2.0.0"
   },
   "engines": {
     "node": "^4.3.0"
