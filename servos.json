@@ -1,0 +1,11 @@
+{
+    "servos" : [
+        {"name" : "camPan",   "min" : 575, "max" : 2460},
+        {"name" : "camTilt",  "min" : 575, "max" : 2460},
+        {"name" : "gripper",  "min" : 553, "max" : 2520},
+        {"name" : "wrist",    "min" : 553, "max" : 2520},
+        {"name" : "elbow",    "min" : 553, "max" : 2520},
+        {"name" : "shoulder", "min" : 750, "max" : 2250},
+        {"name" : "rotate",   "min" : 600, "max" : 2400}
+    ]
+}

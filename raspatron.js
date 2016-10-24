@@ -14,9 +14,12 @@ var nodatron = require('./node_modules/nodatron/lib/nodatron.js'),
     maestro.enableConsole();
 
     maestro.on("connected", function(){
+      var servos = require('servos.json');
+
+      //loop servos array and create servos 
       var camPanServo = maestro.createServo(0);
       var camTiltServo= maestro.createServo(1);
 
       camPanServo.move(0);
-      camTiltServo.move(0);      
+      camTiltServo.move(0);
     }
